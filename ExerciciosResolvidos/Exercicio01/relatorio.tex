@@ -1,0 +1,42 @@
+\documentclass[a4paper,11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[brazilian]{babel}
+\usepackage{hyperref}
+
+\title{Ferramentas de Linha de Comando: Git, Make e Sed}
+\author{Nome do Aluno}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{Introdução}
+
+Este relatório resume três ferramentas de linha de comando vistas nas semanas iniciais
+da disciplina: o controlador de versão \texttt{git}, o automatizador de compilação
+\texttt{make} e o editor de fluxo \texttt{sed}. Essas ferramentas formam a base do
+fluxo de trabalho de um desenvolvedor em ambiente Unix, permitindo versionar código,
+automatizar tarefas repetitivas e transformar texto de forma programática, como
+descrito em \cite{gitscm2024commandline}.
+
+\section{Conceitos}
+
+\begin{itemize}
+  \item \textbf{Git}: sistema de controle de versão distribuído que registra o
+    histórico de alterações de um projeto em commits, permitindo trabalho paralelo
+    através de branches e a posterior integração via merge.
+  \item \textbf{Make}: ferramenta de automação de compilação que, a partir de um
+    \texttt{Makefile}, define regras (targets, dependências e comandos) para evitar
+    a repetição manual de comandos como \texttt{pdflatex} ou \texttt{g++}
+    \cite{embarcados2024makefile}.
+  \item \textbf{Sed}: editor de fluxo (\emph{stream editor}) que aplica transformações
+    de texto linha a linha, muito usado para substituições rápidas via expressões
+    regulares sem abrir um editor interativo.
+\end{itemize}
+
+\bibliographystyle{plain}
+\bibliography{referencias}
+
+\end{document}

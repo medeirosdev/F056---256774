@@ -1,0 +1,15 @@
+This is METAFONT, Version 2.71828182 (preloaded base=mf 2026.4.19)  10 AUG 2026 09:20
+**\mode=localfont; input triangle_loop.mf;
+(triangle_loop.mf (feynmf.mf) [1] ) 
+Here is how much of METAFONT's memory you used:
+ 619 strings out of 5259
+ 7026 string characters out of 69759
+ 34746 words of memory out of 5000000
+ 1387 symbolic tokens out of 9500
+ 14i,67n,58r,28p,134b stack positions out of 300i,300n,1000r,150p,200000b
+ 
+(You used 2w,2h,1d,1i,0l,0k,0e,0p metric file positions
+  out of 256w,16h,16d,64i,15000l,2500k,256e,60p)
+
+Font metrics written on triangle_loop.tfm.
+Output written on triangle_loop.600gf (1 character, 3456 bytes).

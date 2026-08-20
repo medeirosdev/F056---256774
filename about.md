@@ -1,7 +1,6 @@
-echo "# F056---256774" >> README.md
-git init
-git add README.md
-git commit -m "first commit"
-git branch -M main
-git remote add origin git@github.com:medeirosdev/F056---256774.git
-git push -u origin main
+Exercícios e materiais de física computacional F056
+Guilherme de Medeiros
+
+TODO
+Fazer um ambiente virtual para a aplicação toda depois          []
+fazer uma lib em py com funções úteis para as aulas seguintes   [] 

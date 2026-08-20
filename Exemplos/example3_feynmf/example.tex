@@ -1,0 +1,29 @@
+\documentclass{article}
+
+\usepackage{feynmf}
+
+\begin{document}
+
+\begin{fmffile}{triangle_loop}
+\begin{figure}[h]
+\centering
+\parbox{50mm}{
+\begin{fmfchar*}(100,60)
+  \fmfleft{i1,i2}
+  \fmfright{o1}
+  \fmf{curly,tension=0.5}{i1,v1}
+  \fmf{curly,tension=0.5}{i2,v2}
+%  \fmf{curly,tension=2}{i2,v2}
+  \fmf{fermion,tension=0.3}{v2,v1}
+%  \fmf{fermion,tension=0.1}{v2,v1}
+  \fmf{fermion,tension=0.3}{v1,v3}
+  \fmf{fermion,tension=0.3}{v3,v2}
+  \fmf{dashes}{v3,o1}
+     \put(0,60){\small $g$}
+     \put(0,-5){\small $g$}
+     \put(100,28){\small $h,H,A$}
+\end{fmfchar*}}
+\end{figure}
+\end{fmffile}
+
+\end{document}
