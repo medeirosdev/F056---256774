@@ -1,0 +1,4 @@
+*.o
+*.so
+ex1_met/testMET
+ex2_track/testTrack
