@@ -1,0 +1,4 @@
+generate
+plot_and_fit
+*.o
+dados.root

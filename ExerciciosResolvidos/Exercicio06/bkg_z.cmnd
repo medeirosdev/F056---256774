@@ -1,0 +1,14 @@
+Beams:idA = 2212
+Beams:idB = 2212
+Beams:eCM = 13000.
+PDF:pSet = 8
+
+! Z(->bb) + jatos
+WeakZ0:gmZmode = 2
+WeakSingleBoson:ffbar2gmZ = on
+23:onMode = off
+23:onIfMatch = 5 -5
+
+HadronLevel:all = off
+Main:numberOfEvents = 1000
+Next:numberCount = 200

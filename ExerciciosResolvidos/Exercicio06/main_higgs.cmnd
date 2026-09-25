@@ -1,0 +1,22 @@
+! ---- Configuracao basica do processo ----
+Beams:idA = 2212
+Beams:idB = 2212
+Beams:eCM = 13000.            ! LHC Run 2, 13 TeV
+
+! ---- Funcoes de estrutura partonicas ----
+! nao tenho LHAPDF instalado, entao uso o CTEQ6L1 que ja vem dentro do pythia (pSet 8)
+! PDF:pSet = LHAPDF6:cteq6l1
+PDF:pSet = 8
+
+! ---- Producao do Higgs ----
+HiggsSM:gg2H = on             ! fusao de gluons, canal dominante (~87%)
+
+25:m0 = 125.0
+25:onMode = off
+25:onIfMatch = 5 -5           ! H -> b bbar (maior BR, ~58%)
+
+! sem hadronizacao, os b ficam como particulas finais (nao precisa reconstruir jato)
+HadronLevel:all = off
+
+Main:numberOfEvents = 1000
+Next:numberCount = 200

@@ -1,0 +1,12 @@
+Beams:idA = 2212
+Beams:idB = 2212
+Beams:eCM = 13000.
+PDF:pSet = 8
+
+! QCD bb (background dominante)
+HardQCD:hardbbbar = on
+PhaseSpace:pTHatMin = 20.
+
+HadronLevel:all = off
+Main:numberOfEvents = 1000
+Next:numberCount = 200
