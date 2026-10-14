@@ -1,0 +1,12 @@
+set automatic_html_opening False
+import model sm
+generate p p > t t~
+output ttbar_process
+launch
+shower=OFF
+detector=OFF
+analysis=OFF
+done
+set nevents 10000
+set iseed 12345
+done

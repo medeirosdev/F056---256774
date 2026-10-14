@@ -1,0 +1,3 @@
+  === Results Summary for run: run_01 tag: tag_1 ===
+     Cross-section :   504.5 +- 0.5453 pb
+     Nb of events :  10000
