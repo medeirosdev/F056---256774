@@ -1,0 +1,22 @@
+======================================================================
+Problema 1 - outras PDFs
+======================================================================
+sin^2(x) em [0, pi]             : f_max = 1.0000, sorteios = 19850, eps = 0.5038 (esperada 0.5000), KS p = 0.46
+exp(-x) truncada em [0, 5]      : f_max = 1.0000, sorteios = 50144, eps = 0.1994 (esperada 0.1987), KS p = 0.84
+soma de 2 gaussianas em [-6, 7] : f_max = 0.4190, sorteios = 54586, eps = 0.1832 (esperada 0.1836), KS p = 0.58
+
+======================================================================
+Problema 2 - Gauss(0, 1), N = 10^4 aceitos
+======================================================================
+(a) [-5, 5]: 40113 pares sorteados (80226 numeros uniformes)
+    eficiencia = 0.2493, esperada = 0.2507
+    media = -0.0017, desvio = 0.9999
+
+(b) eficiencia em funcao do intervalo
+   intervalo    pares  eps medida  eps esperada  1/(L f_max)
+     [-3, 3]    24062      0.4156        0.4166       0.4178
+     [-5, 5]    39985      0.2501        0.2507       0.2507
+   [-10, 10]    79288      0.1261        0.1253       0.1253
+
+100 repeticoes em [-5, 5]: <N_sorteios> = 39882 +- 345
+    esperado (binomial negativa): 39894 +- 345
