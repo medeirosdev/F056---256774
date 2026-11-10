@@ -1,0 +1,4 @@
+# Exercicio 2(a): 1000 eletrons de 10 GeV, absorvedor de chumbo
+/control/alias material G4_Pb
+/control/alias neventos 1000
+/control/execute perfil.mac

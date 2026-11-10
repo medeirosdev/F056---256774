@@ -1,0 +1,8 @@
+# Exercicio 1b: proton de 10 GeV, absorvedor G4_Pb
+# rodar com o figura.mac no diretorio atual: exampleB4a -m proton_10GeV_Pb.mac
+/control/alias material G4_Pb
+/control/alias particula proton
+/control/alias arquivo proton_10GeV_Pb.png
+/control/alias titulo "proton 10 GeV - absorvedor G4_Pb"
+/control/alias nvis 1
+/control/execute figura.mac

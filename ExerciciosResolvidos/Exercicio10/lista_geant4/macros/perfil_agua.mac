@@ -1,0 +1,4 @@
+# Exercicio 2(f): 1000 eletrons de 10 GeV, absorvedor de agua
+/control/alias material G4_WATER
+/control/alias neventos 1000
+/control/execute perfil.mac

@@ -1,0 +1,8 @@
+# Exercicio 1b (figura extra): alfa de 10 GeV, absorvedor G4_Pb
+# rodar com o figura.mac no diretorio atual: exampleB4a -m alfa_10GeV_Pb_20eventos.mac
+/control/alias material G4_Pb
+/control/alias particula alpha
+/control/alias arquivo alfa_10GeV_Pb_20eventos.png
+/control/alias titulo "alfa 10 GeV - absorvedor G4_Pb (20 eventos sobrepostos)"
+/control/alias nvis 20
+/control/execute figura.mac

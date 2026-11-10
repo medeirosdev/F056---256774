@@ -1,0 +1,10 @@
+# diretorios de build e saidas das simulacoes (CSV de ~1 GB)
+build/
+saidas/
+*.csv
+*.root
+# auxiliares do LaTeX
+relatorio/*.aux
+relatorio/*.log
+relatorio/*.out
+__pycache__/

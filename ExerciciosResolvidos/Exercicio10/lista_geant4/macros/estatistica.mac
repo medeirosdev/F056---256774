@@ -1,0 +1,11 @@
+# Exercicio 1: estatistica de deposicao de energia (sem visualizacao) para comparar e-, p e alfa.
+# Usa os aliases {material}, {particula} e {neventos}; grava so a ntuple B4 (Eabs, Egap por evento).
+/run/numberOfThreads 8
+/random/setSeeds 2468 1357
+/B4/det/absorberMaterial {material}
+/run/initialize
+/analysis/ntuple/setActivation 1 false
+/gun/particle {particula}
+/gun/energy 10 GeV
+/run/printProgress 0
+/run/beamOn {neventos}

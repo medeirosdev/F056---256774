@@ -1,0 +1,206 @@
+diff -ru B4a_original/include/DetectorConstruction.hh ./include/DetectorConstruction.hh
+--- B4a_original/include/DetectorConstruction.hh	2026-11-10 19:02:00.841455741 -0300
++++ ./include/DetectorConstruction.hh	2026-11-10 19:02:31.382683494 -0300
+@@ -36,6 +36,7 @@
+ 
+ class G4VPhysicalVolume;
+ class G4GlobalMagFieldMessenger;
++class G4GenericMessenger;
+ 
+ namespace B4
+ {
+@@ -57,8 +58,8 @@
+ class DetectorConstruction : public G4VUserDetectorConstruction
+ {
+   public:
+-    DetectorConstruction() = default;
+-    ~DetectorConstruction() override = default;
++    DetectorConstruction();
++    ~DetectorConstruction() override;
+ 
+   public:
+     G4VPhysicalVolume* Construct() override;
+@@ -84,6 +85,11 @@
+     G4VPhysicalVolume* fGapPV = nullptr;  // the gap physical volume
+ 
+     G4bool fCheckOverlaps = true;  // option to activate checking of volumes overlaps
++
++    // [lista_geant4] material do absorvedor escolhido por macro, antes do /run/initialize:
++    //   /B4/det/absorberMaterial G4_WATER
++    G4String fAbsorberMaterialName = "G4_Pb";
++    G4GenericMessenger* fMessenger = nullptr;
+ };
+ 
+ // inline functions
+diff -ru B4a_original/src/DetectorConstruction.cc ./src/DetectorConstruction.cc
+--- B4a_original/src/DetectorConstruction.cc	2026-11-10 19:02:00.841755820 -0300
++++ ./src/DetectorConstruction.cc	2026-11-10 19:02:31.466689557 -0300
+@@ -31,6 +31,7 @@
+ #include "G4AutoDelete.hh"
+ #include "G4Box.hh"
+ #include "G4Colour.hh"
++#include "G4GenericMessenger.hh"
+ #include "G4GlobalMagFieldMessenger.hh"
+ #include "G4LogicalVolume.hh"
+ #include "G4Material.hh"
+@@ -48,6 +49,20 @@
+ 
+ G4ThreadLocal G4GlobalMagFieldMessenger* DetectorConstruction::fMagFieldMessenger = nullptr;
+ 
++// [lista_geant4] comando para trocar o material do absorvedor sem recompilar
++DetectorConstruction::DetectorConstruction()
++{
++  fMessenger = new G4GenericMessenger(this, "/B4/det/", "Geometria do calorimetro B4");
++  fMessenger->DeclareProperty("absorberMaterial", fAbsorberMaterialName,
++                              "Material NIST do absorvedor (ex.: G4_Pb, G4_WATER). "
++                              "Usar antes de /run/initialize.");
++}
++
++DetectorConstruction::~DetectorConstruction()
++{
++  delete fMessenger;
++}
++
+ //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+ 
+ G4VPhysicalVolume* DetectorConstruction::Construct()
+@@ -66,6 +81,8 @@
+   // Lead material defined using NIST Manager
+   auto nistManager = G4NistManager::Instance();
+   nistManager->FindOrBuildMaterial("G4_Pb");
++  // [lista_geant4] material escolhido para o absorvedor (G4_Pb por padrao)
++  nistManager->FindOrBuildMaterial(fAbsorberMaterialName);
+ 
+   // Liquid argon material
+   G4double a;  // mass of a mole;
+@@ -99,7 +116,8 @@
+ 
+   // Get materials
+   auto defaultMaterial = G4Material::GetMaterial("Galactic");
+-  auto absorberMaterial = G4Material::GetMaterial("G4_Pb");
++  // [lista_geant4] antes: G4Material::GetMaterial("G4_Pb")
++  auto absorberMaterial = G4Material::GetMaterial(fAbsorberMaterialName);
+   auto gapMaterial = G4Material::GetMaterial("liquidArgon");
+ 
+   if (!defaultMaterial || !absorberMaterial || !gapMaterial) {
+@@ -210,6 +228,13 @@
+          << gapMaterial->GetName() << " ] " << G4endl
+          << "------------------------------------------------------------" << G4endl;
+ 
++  // [lista_geant4] comprimento de radiacao X0 e de interacao nuclear lambda_I dos materiais
++  for (auto mat : {absorberMaterial, gapMaterial}) {
++    G4cout << "---> " << mat->GetName() << ": densidade = " << mat->GetDensity() / (g / cm3)
++           << " g/cm3, X0 = " << mat->GetRadlen() / mm
++           << " mm, lambda_I = " << mat->GetNuclearInterLength() / mm << " mm" << G4endl;
++  }
++
+   //
+   // Visualization attributes
+   //
+diff -ru B4a_original/src/RunAction.cc ./src/RunAction.cc
+--- B4a_original/src/RunAction.cc	2026-11-10 19:02:00.841827694 -0300
++++ ./src/RunAction.cc	2026-11-10 19:05:44.042930367 -0300
+@@ -53,8 +53,13 @@
+   // analysisManager->SetHistoDirectoryName("histograms");
+   // analysisManager->SetNtupleDirectoryName("ntuple");
+   analysisManager->SetVerboseLevel(1);
+-  analysisManager->SetNtupleMerging(true);
+-  // Note: merging ntuples is available only with Root output
++  // [lista_geant4] saida em CSV (um arquivo por thread). O nome pode ser trocado na macro
++  // com /analysis/setFileName
++  analysisManager->SetDefaultFileType("csv");
++  analysisManager->SetFileName("calo_output");
++  // [lista_geant4] permite desligar a ntuple de passos por macro quando ela nao e necessaria:
++  //   /analysis/ntuple/setActivation 1 false
++  analysisManager->SetActivation(true);
+ 
+   // Book histograms, ntuple
+   //
+@@ -73,6 +78,18 @@
+   analysisManager->CreateNtupleDColumn("Labs");
+   analysisManager->CreateNtupleDColumn("Lgap");
+   analysisManager->FinishNtuple();
++
++  // [lista_geant4] ntuple com um registro por passo com deposicao de energia (id = 1)
++  // Colunas 0-4 como no enunciado; EventID para somar por evento; IsGap = 0 absorvedor, 1 gap
++  analysisManager->CreateNtuple("CaloHits", "Energy deposits");
++  analysisManager->CreateNtupleDColumn("Edep_MeV");
++  analysisManager->CreateNtupleIColumn("Layer");
++  analysisManager->CreateNtupleDColumn("x");
++  analysisManager->CreateNtupleDColumn("y");
++  analysisManager->CreateNtupleDColumn("z");
++  analysisManager->CreateNtupleIColumn("EventID");
++  analysisManager->CreateNtupleIColumn("IsGap");
++  analysisManager->FinishNtuple();
+ }
+ 
+ //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+@@ -87,12 +104,8 @@
+ 
+   // Open an output file
+   //
+-  G4String fileName = "B4.root";
+-  // Other supported output types:
+-  // G4String fileName = "B4.csv";
+-  // G4String fileName = "B4.hdf5";
+-  // G4String fileName = "B4.xml";
+-  analysisManager->OpenFile(fileName);
++  // [lista_geant4] usa o nome definido por SetFileName / /analysis/setFileName
++  analysisManager->OpenFile();
+   G4cout << "Using " << analysisManager->GetType() << G4endl;
+ }
+ 
+diff -ru B4a_original/src/SteppingAction.cc ./src/SteppingAction.cc
+--- B4a_original/src/SteppingAction.cc	2026-11-10 19:02:00.841849786 -0300
++++ ./src/SteppingAction.cc	2026-11-10 19:02:31.467150040 -0300
+@@ -31,7 +31,11 @@
+ #include "DetectorConstruction.hh"
+ #include "EventAction.hh"
+ 
++#include "G4AnalysisManager.hh"
++#include "G4Event.hh"
++#include "G4RunManager.hh"
+ #include "G4Step.hh"
++#include "G4SystemOfUnits.hh"
+ #include "globals.hh"
+ 
+ using namespace B4;
+@@ -64,13 +68,36 @@
+     stepLength = step->GetStepLength();
+   }
+ 
+-  if (volume == fDetConstruction->GetAbsorberPV()) {
++  G4bool noAbsorvedor = (volume == fDetConstruction->GetAbsorberPV());
++  G4bool noGap = (volume == fDetConstruction->GetGapPV());
++
++  if (noAbsorvedor) {
+     fEventAction->AddAbs(edep, stepLength);
+   }
+ 
+-  if (volume == fDetConstruction->GetGapPV()) {
++  if (noGap) {
+     fEventAction->AddGap(edep, stepLength);
+   }
++
++  // [lista_geant4] um registro por passo com deposicao de energia, so dentro do calorimetro
++  // (absorvedor ou gap, onde a hierarquia e World > Calorimeter > Layer > Abso/Gap)
++  if (edep <= 0. || !(noAbsorvedor || noGap)) return;
++
++  auto touchable = step->GetPreStepPoint()->GetTouchable();
++  auto layer = touchable->GetReplicaNumber(1);  // replica da "Layer" (mae do Abso/Gap), 0..9
++  auto pos = step->GetPreStepPoint()->GetPosition();
++  auto eventID = G4RunManager::GetRunManager()->GetCurrentEvent()->GetEventID();
++
++  auto am = G4AnalysisManager::Instance();
++  const G4int id = 1;  // ntuple "CaloHits"
++  am->FillNtupleDColumn(id, 0, edep / MeV);
++  am->FillNtupleIColumn(id, 1, layer);
++  am->FillNtupleDColumn(id, 2, pos.x() / mm);
++  am->FillNtupleDColumn(id, 3, pos.y() / mm);
++  am->FillNtupleDColumn(id, 4, pos.z() / mm);
++  am->FillNtupleIColumn(id, 5, eventID);
++  am->FillNtupleIColumn(id, 6, noGap ? 1 : 0);
++  am->AddNtupleRow(id);
+ }
+ 
+ //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

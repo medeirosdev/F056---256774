@@ -1,0 +1,8 @@
+material particula    N  <Eabs> MeV  <Egap> MeV  <Etot>/E0  rms/E0 Egap/Etot frac. MIP Emip MeV <Lgap> mm
+      Pb   eletron  500      8880.7       489.2     0.9370  0.0210    0.0522       nan      nan    2433.5
+      Pb    proton  500      1306.2        95.1     0.1401  0.1624    0.0742      0.51    143.9     288.5
+      Pb      alfa  500      1374.2       101.0     0.1475  0.1121    0.0727      0.50    554.0     242.1
+    agua   eletron  500        33.7        20.2     0.0054  0.0027    0.3715       nan      nan     102.1
+    agua    proton  500        57.1        32.3     0.0089  0.0160    0.3538      0.77     28.2      86.8
+    agua      alfa  500       107.1        58.4     0.0166  0.0106    0.3488      0.80    118.0     116.3
+figura: figuras/ex1_energia_depositada.png
