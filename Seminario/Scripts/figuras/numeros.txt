@@ -1,0 +1,13 @@
+eventos = 100000
+toys: media = 99.0, desvio = 14.1, max = 166.7, fracao >= t_esp = 0.0
+esperado: t = 359.1, p = 3.59e-31, Z = 11.55; t para 5 sigma = 186.0
+toys entre 70 e 130: 96.7%
+observado: t = 361.6, p = 1.42e-31, Z = 11.63
+varredura: minimo em m = 35.00 GeV, p = 3.0e-45, Z = 14.1; Z > 3 so entre 34.50 e 35.50 GeV
+ajuste livre A = 985.9762 +- 87.0585
+ajuste livre mu = 35.0069 +- 0.0246
+ajuste livre s = 0.2356 +- 0.0236
+ajuste livre B = 99013.9518 +- 324.9712
+Z_local (ajuste livre) = 14.16
+CSC (A = 1000, s = 0,2 fixos) x livre: -2 dlnL = 4.15, 2 gl, p = 0.13
+massa: 35.0069 GeV, 68%: [34.9823, 35.0313], 95%: [34.9573, 35.0562]
